@@ -21,16 +21,22 @@ def get_data(path="raw_data_finance.csv"):
         except:
             pass
 
-
-    irrelevant_cols = ["finalLink", "link", "reportedCurrency"]
+    
+    # Outlier columns that cannot be auto handles
+    irrelevant_cols = ["cik", "finalLink", "link"]
     df["period"] = df["period"].replace("FY", "Q4").apply(lambda x:int(x[-1]) if isinstance(x, str) else x)
     df["rating"] = pd.Categorical(df["rating"])
 
-    # Analyst Recommendations
+    # Analyst Recommendations handling
     recommendation_cols = df.filter(regex="Recommendation").columns
     for col in recommendation_cols:
         df[col] = pd.Categorical(df[col])
+    df = add_return(df)
 
-    return df.drop(columns=irrelevant_cols)
+    return df.drop(columns=irrelevant_cols).sort_index(level=0)
 
     
+
+def add_return(df):
+    df["return"] = df["close"].groupby(level="symbol", group_keys=False).apply(lambda x: x.pct_change())
+    return df
