@@ -25,12 +25,20 @@ def get_data(path="raw_data_finance.csv"):
     # Outlier columns that cannot be auto handles
     irrelevant_cols = ["cik", "finalLink", "link"]
     df["period"] = df["period"].replace("FY", "Q4").apply(lambda x:int(x[-1]) if isinstance(x, str) else x)
-    df["rating"] = pd.Categorical(df["rating"])
 
     # Analyst Recommendations handling
+
+    recommendation_mapping = {
+        "Strong Buy": 2,
+        "Buy": 1,
+        "Neutral": 0,
+        "Sell": -1,
+        "Strong Sell": -2
+    }
     recommendation_cols = df.filter(regex="Recommendation").columns
     for col in recommendation_cols:
-        df[col] = pd.Categorical(df[col])
+
+        df[col] = df[col].map(recommendation_mapping)
     df = add_return(df)
 
     return df.drop(columns=irrelevant_cols).sort_index(level=0)
