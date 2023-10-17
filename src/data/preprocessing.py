@@ -40,6 +40,7 @@ def get_data(path="raw_data_finance.csv"):
 
         df[col] = df[col].map(recommendation_mapping)
     df = add_return(df)
+    df = feature_engineering(df)
 
     return df.drop(columns=irrelevant_cols).sort_index(level=0)
 
