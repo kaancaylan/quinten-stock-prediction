@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def inference(
-        inference_start: dt.datetime, inference_end: dt.datetime, 
+        inference_start: dt.datetime, inference_end: dt.datetime,
         prediction_start: dt.datetime, prediction_end: dt.datetime,
         model_path: str, df=None):
     model = XGBRegressor()
@@ -33,7 +33,6 @@ def inference(
 
     return top20_stocks
 
-    
 
 def rmse(y_true, y_pred):
     """
@@ -50,5 +49,3 @@ def rmse(y_true, y_pred):
     mean_squared_error = squared_errors.mean()
     rmse = np.sqrt(mean_squared_error)
     return rmse
-    
-    

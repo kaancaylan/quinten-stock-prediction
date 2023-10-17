@@ -22,9 +22,6 @@ def train(
     model = XGBRegressor()
     model.fit(X_train.to_numpy(), y_train)
     model.save_model("models/{model_name}")
-    
-
-
 
 
 def modeling_prep(X_train, test_per_rets):
@@ -32,12 +29,12 @@ def modeling_prep(X_train, test_per_rets):
     to_drop = test_per_rets[test_per_rets.isna()].index.get_level_values("symbol").unique()
 
     # drop stocks that traded under 1$ in the period
-    under_1 = X_train['close'].groupby(level="symbol").apply(lambda x: (x<1).any(axis=1)).droplevel(1)
+    under_1 = X_train['close'].groupby(level="symbol").apply(lambda x: (x < 1).any(axis=1)).droplevel(1)
     to_drop = to_drop.union(under_1[under_1].index).unique()
 
     X_train = X_train.drop(to_drop)
     y_train = test_per_rets.drop(to_drop, level=1)
-    
+
     assert len(np.setdiff1d(X_train.index, y_train.index.get_level_values(1))) == 1
     assert len(np.setdiff1d(y_train.index.get_level_values(1), X_train.index)) == 1
 
@@ -52,10 +49,13 @@ def modeling_prep(X_train, test_per_rets):
 
 def main():
     parser = argparse.ArgumentParser(description="Train the model")
-    parser.add_argument("training_start", 
-    help="Date for the start of training. Format should be YYY/MM/DD, the day should be the last day of month. ", type=str)
-    parser.add_argument("training_end", 
-    help="Date for the end of training. Format should be YYY/MM/DD, the day should be the last day of month. ", type=str)
+    parser.add_argument("training_start",
+                        help="Date for the start of training. Format should be YYY/MM/DD, the day should be the last day of month. ",
+                        type=str)
+    parser.add_argument("training_end",
+                        help="Date for the end of training. Format should be YYY/MM/DD, the day should be the last day of month. ",
+                        type=str)
+
 
 if __name__ == "__main__":
     main()
