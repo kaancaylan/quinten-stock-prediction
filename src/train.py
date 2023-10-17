@@ -2,11 +2,13 @@ import src.data.preprocessing as pr
 import datetime as dt
 import numpy as np
 from xgboost import XGBRegressor
+import argparse
 
 
 def train(
         training_start: dt.datetime, training_end: dt.datetime,
-        validation_start: dt.datetime, validation_end: dt.datetime
+        validation_start: dt.datetime, validation_end: dt.datetime,
+        model_name: str = "Model1"
 ):
     df = pr.get_data()
     X_train = df.loc[training_start: training_end]
@@ -19,7 +21,7 @@ def train(
 
     model = XGBRegressor()
     model.fit(X_train.to_numpy(), y_train)
-    model.save_model("__insert_model_path__")
+    model.save_model("models/{model_name}")
     
 
 
@@ -46,3 +48,14 @@ def modeling_prep(X_train, test_per_rets):
     X_train = X_train.select_dtypes(exclude=["object", "datetime"])
 
     return X_train, y_train
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Train the model")
+    parser.add_argument("training_start", 
+    help="Date for the start of training. Format should be YYY/MM/DD, the day should be the last day of month. ", type=str)
+    parser.add_argument("training_end", 
+    help="Date for the end of training. Format should be YYY/MM/DD, the day should be the last day of month. ", type=str)
+
+if __name__ == "__main__":
+    main()
