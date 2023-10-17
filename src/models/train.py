@@ -2,7 +2,6 @@ from src.data import preprocessing as pr
 import datetime as dt
 import numpy as np
 from xgboost import XGBRegressor
-import datetime
 import argparse
 
 
@@ -10,9 +9,21 @@ import argparse
 def train(
         training_start: dt.datetime, training_end: dt.datetime,
         validation_start: dt.datetime, validation_end: dt.datetime,
-        model_name: str = "Model1",
+        model_name: str = "Model1", df=None
 ):
-    df = pr.get_data()
+    """Train the model.
+        All the date values must exactly match the ones in the dataset.
+
+    Args:
+        training_start (dt.datetime): The date in which training period will start
+        training_end (dt.datetime): The date in which the training period will end
+        validation_start (dt.datetime): The date in which the validation period starts. Validation period is used 
+                                    as the label for the training data. The period is usually taken as 6 months.
+        validation_end (dt.datetime): The date in which the validation period will end.
+        model_name (str, optional): _description_. Defaults to "Model1".
+    """
+    if df is None:
+        df = pr.get_data()
     X_train = df.loc[training_start: training_end]
     X_train = X_train.unstack(level=0).drop("year", axis=1)
 
