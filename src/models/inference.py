@@ -10,15 +10,14 @@ import pandas as pd
 def inference(
         inference_start: dt.datetime, inference_end: dt.datetime, 
         prediction_start: dt.datetime, prediction_end: dt.datetime,
-        model_path: str, df=None):
-    model = Booster()
-    model.load_model(f"src/models/{model_path}")
+        model, df=None):
+    #model = Booster()
+    #model.load_model(f"src/models/{model_path}")
     if df is None:
         df = pr.get_data()
     X_test = df.loc[inference_start: inference_end]
     X_test = X_test.unstack(level=0).drop("year", axis=1)
     X_test = X_test.select_dtypes(exclude=["object", "datetime"])
-
     model.predict(X_test)
     y_pred = pd.Series(model.predict(X_test), X_test.index)
     top20_stocks = y_pred.sort_values()[-20:].index

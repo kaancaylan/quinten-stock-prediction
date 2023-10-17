@@ -35,6 +35,7 @@ def train(
     model = XGBRegressor()
     model.fit(X_train.to_numpy(), y_train)
     model.save_model(f"src/models/{model_name}")
+    return  model
     
 
 
