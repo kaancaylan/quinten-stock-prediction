@@ -3,6 +3,7 @@ In the scope of this project we aimed to develop an ML-based assistance system f
 trade.
 
 ## Project structure
+* `bash` - The directory to store bash scripts;
 * `data` - The directory to store the data;
 * `docs` - The directory with the documentation files;
 * `models` - The directory to store pre-trained models' weights;
