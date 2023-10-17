@@ -1,5 +1,5 @@
 # Quinten Best Stocks Prediction
-In the scope of this project we aimed to develop an ML-based assistance system for determining the best set pf stocks to
+In the scope of this project we aimed to develop an ML-based assistance system for determining the best set of stocks to
 trade.
 
 ## Project structure
