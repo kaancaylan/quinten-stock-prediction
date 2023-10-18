@@ -1,4 +1,4 @@
-from src.data import preprocessing as pr
+from src.data import preprocessing_utils as pr
 import datetime as dt
 import numpy as np
 from xgboost import XGBRegressor
@@ -8,7 +8,7 @@ import pandas as pd
 
 
 def inference(
-        inference_start: dt.datetime, inference_end: dt.datetime, 
+        inference_start: dt.datetime, inference_end: dt.datetime,
         prediction_start: dt.datetime, prediction_end: dt.datetime,
         model, df=None):
     #model = Booster()
@@ -33,7 +33,6 @@ def inference(
 
     return top20_stocks
 
-    
 
 def rmse(y_true, y_pred):
     """
@@ -50,5 +49,3 @@ def rmse(y_true, y_pred):
     mean_squared_error = squared_errors.mean()
     rmse = np.sqrt(mean_squared_error)
     return rmse
-    
-    
