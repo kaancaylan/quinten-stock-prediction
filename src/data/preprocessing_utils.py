@@ -23,8 +23,7 @@ def get_data(path="raw_data_finance.csv"):
     # Outlier columns that cannot be auto handles
     irrelevant_cols = ["cik", "finalLink", "link"]
 
-    df["period"] = df["period"].replace("FY", "Q4").apply(
-        lambda x: int(x[-1]) if isinstance(x, str) else x)
+    df["period"] = df["period"].replace("FY", "Q4").apply(lambda x: int(x[-1]) if isinstance(x, str) else x)
 
     # Analyst Recommendations handling
 
@@ -37,17 +36,16 @@ def get_data(path="raw_data_finance.csv"):
     }
     recommendation_cols = df.filter(regex="Recommendation").columns
     for col in recommendation_cols:
-
         df[col] = df[col].map(recommendation_mapping)
     df = add_return(df)
     df = feature_engineering(df)
+    df.replace([np.inf, -np.inf], np.nan, inplace=True)
 
     return df.drop(columns=irrelevant_cols).sort_index(level=0)
 
 
 def add_return(df):
-    df["return"] = df["close"].groupby(
-        level="symbol", group_keys=False).apply(lambda x: x.pct_change())
+    df["return"] = df["close"].groupby(level="symbol", group_keys=False).apply(lambda x: x.pct_change())
     return df
 
 
@@ -61,7 +59,7 @@ def calculate_eps(net_income, weighted_average_shs_out):
 
 
 def feature_engineering(df):
-    df['ROI'] = (df['capitalExpenditure']/df['netIncome']) * 100
+    df['ROI'] = (df['capitalExpenditure'] / df['netIncome']) * 100
     df['revenue'] = df['revenue'].replace(0, np.nan)
     df['profit_margin'] = (df['netIncome'] / df['revenue']) * 100
     df['weightedAverageShsOut'] = df['weightedAverageShsOut'].replace(
@@ -70,7 +68,7 @@ def feature_engineering(df):
     df['eps'] = eps
     df['eps'] = df['eps'].replace(0, np.nan)
     df['market_value_per_share'] = df['marketCapitalization'] / \
-        df['weightedAverageShsOut']
+                                   df['weightedAverageShsOut']
     df['pe_ratio'] = df['market_value_per_share'] / df['eps']
 
     return df
