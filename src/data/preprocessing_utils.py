@@ -10,6 +10,9 @@ def get_data(path="raw_data_finance.csv"):
     # set index on symbol datetime
     df.set_index(["date", "symbol"], inplace=True)
 
+    # Drop all stocks without price
+    df = df[df["close"].notna()]
+
     # Drop duplicates on index
     df = df[~df.index.duplicated(keep='first')]
 
@@ -19,6 +22,9 @@ def get_data(path="raw_data_finance.csv"):
             df[col] = pd.to_numeric(df[col])
         except:
             pass
+    
+    # Drop all stocks with less than 1000 volume
+    df = df[df["volume"]>1000]
 
     # Outlier columns that cannot be auto handles
     irrelevant_cols = ["cik", "finalLink", "link"]
@@ -40,6 +46,7 @@ def get_data(path="raw_data_finance.csv"):
     df = add_return(df)
     df = feature_engineering(df)
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
+    
 
     return df.drop(columns=irrelevant_cols).sort_index(level=0)
 
