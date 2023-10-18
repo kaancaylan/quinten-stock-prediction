@@ -37,42 +37,42 @@ def main(args: argparse.Namespace) -> None:
     all_columns = df.columns
     bad_columns = set()
     for symbol in good_symbols:
-        bad_columns = bad_columns.union(all_columns[df[df.symbol == symbol].isna().all()])
+        bad_columns = bad_columns.union(
+            all_columns[df[df.symbol == symbol].isna().all()]
+        )
 
     good_columns = set(all_columns).difference(bad_columns)
     df = df[list(good_columns)]
 
     # Drop useless columns.
-    to_drop = [
-        'year'
-    ]
+    to_drop = ["year"]
     df = df.drop(columns=to_drop)
 
     # Drop highly correlated features.
     correlated_columns = [
-        'priceToBookRatio',
-        'grahamNumber',
-        'revenuePerShare',
-        'grahamNetNet',
-        'netIncomePerShare',
-        'ptbRatio',
-        'debtEquityRatio',
-        'stockPrice',
-        'operatingCashFlowPerShare',
-        'interestDebtPerShare',
-        'companyEquityMultiplier',
-        'cashPerShare',
-        'tangibleBookValuePerShare',
-        'freeCashFlowPerShare',
-        'roe',
-        'debtToEquity',
-        'priceBookValueRatio',
-        'pfcfRatio',
-        'enterpriseValue',
-        'bookValuePerShare',
-        'pbRatio',
-        'debtRatio',
-        'returnOnTangibleAssets'
+        "priceToBookRatio",
+        "grahamNumber",
+        "revenuePerShare",
+        "grahamNetNet",
+        "netIncomePerShare",
+        "ptbRatio",
+        "debtEquityRatio",
+        "stockPrice",
+        "operatingCashFlowPerShare",
+        "interestDebtPerShare",
+        "companyEquityMultiplier",
+        "cashPerShare",
+        "tangibleBookValuePerShare",
+        "freeCashFlowPerShare",
+        "roe",
+        "debtToEquity",
+        "priceBookValueRatio",
+        "pfcfRatio",
+        "enterpriseValue",
+        "bookValuePerShare",
+        "pbRatio",
+        "debtRatio",
+        "returnOnTangibleAssets",
     ]
     df = df.drop(columns=correlated_columns)
 
@@ -87,10 +87,19 @@ def main(args: argparse.Namespace) -> None:
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--raw-data-path", default="raw_data_finance.csv",
-                        help="Path to the file with the raw data.")
-    parser.add_argument("--save-path", default="processed_data_finance.csv",
-                        help="Path where to save processed data.")
-    parser.add_argument("--filter_date", default="2017-01-31",
-                        help="Records before this date will be dropped.")
+    parser.add_argument(
+        "--raw-data-path",
+        default="raw_data_finance.csv",
+        help="Path to the file with the raw data.",
+    )
+    parser.add_argument(
+        "--save-path",
+        default="processed_data_finance.csv",
+        help="Path where to save processed data.",
+    )
+    parser.add_argument(
+        "--filter_date",
+        default="2017-01-31",
+        help="Records before this date will be dropped.",
+    )
     main(parser.parse_args())
